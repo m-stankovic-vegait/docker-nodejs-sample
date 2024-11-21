@@ -28,6 +28,7 @@ COPY --from=build /app/src ./src
 
 EXPOSE 3000
 
+#TODO: Add script for this
 ENTRYPOINT ["node", "./src/index.js"]
 
 

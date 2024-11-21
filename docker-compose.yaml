@@ -1,7 +1,42 @@
 version: '3'
 services:
   test-app:
-    # image: test-app:0.1
-    image: test-app:0.6
+    image: test-app:0.1
+    depends_on:
+      - postgres-db
+    environment:
+      POSTGRES_HOST: postgres-db
+      POSTGRES_USER: postgres
+      #TODO: Move to secrets!
+      POSTGRES_PASSWORD: some-password
+      POSTGRES_DB: sampleDB
     ports: 
       - 3001:3000
+      - 5432:5432
+    #TODO: Use non-root user for running the app
+
+  postgres-db:
+    image: postgres:17.1-alpine3.20
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: some-password #TODO: Move to secrets or system env variable?
+      POSTGRES_DB: sampleDB
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready"]
+    #   interval: 1s
+    #   timeout: 5s
+    #   retries: 10
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 200M
+
+volumes:
+  pgdata:
+
+# networks:
+#   default:
