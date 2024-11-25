@@ -20,10 +20,10 @@ jobs:
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag docker-nodejs-sample:$(date +%s)
     
-    - name: Push the Docker image
+    - name: Login to container registry
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+      run: docker login ghcr.io -u USERNAME -p $CR_PAT
 
     - name: Push the Docker image
       run: docker push ghcr.io/docker-nodejs-sample/docker-nodejs-sample:latest
