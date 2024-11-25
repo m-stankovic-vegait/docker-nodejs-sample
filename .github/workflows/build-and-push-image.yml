@@ -1,0 +1,31 @@
+name: Docker Image CI
+
+on: workflow_dispatch
+  #push:
+    #branches: [ "main" ]
+  #pull_request:
+    #branches: [ "main" ]
+
+jobs:
+  
+  build:
+    name: Build & Push Docker image to Github container registry
+    runs-on: ubuntu-latest
+    permissions:
+        contents: read
+        packages: write
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag docker-nodejs-sample:$(date +%s)
+    
+    - name: Push the Docker image
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: echo $CR_PAT | docker login ghcr.io -u USERNAME --password-stdin
+
+    - name: Push the Docker image
+      run: docker push ghcr.io/docker-nodejs-sample/docker-nodejs-sample:latest
+      
+        
