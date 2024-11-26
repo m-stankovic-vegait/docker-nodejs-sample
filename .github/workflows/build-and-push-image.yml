@@ -1,10 +1,10 @@
 name: Docker Image CI
 
-on: workflow_dispatch
-  #push:
-    #branches: [ "main" ]
-  #pull_request:
-    #branches: [ "main" ]
+on: 
+  # workflow_dispatch
+  push:
+      tags:
+        '**'
 
 env:
   REGISTRY: ghcr.io
@@ -53,12 +53,3 @@ jobs:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
-
-      # - name: Build the Docker image
-      #   run: docker build . --file Dockerfile --tag ghcr.io/docker-nodejs-sample/docker-nodejs-sample:latest
-        # run: docker build . --file Dockerfile --tag docker-nodejs-sample:$(date +%s)
-
-      # - name: Push the Docker image
-      #   run: docker push ghcr.io/docker-nodejs-sample/docker-nodejs-sample:latest
-      
-        
